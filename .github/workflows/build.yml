@@ -120,7 +120,7 @@ jobs:
       fail-fast: false
       matrix:
         qt:
-          - version: 6.6.0
+          - version: 6.8.6
 
         env:
           - name: linux
@@ -134,7 +134,7 @@ jobs:
             pack: 0
             cmake_env: {}
 
-          - name: macos
+          - name: macos-intel
             os: macos-15-intel
             ninja_platform: mac
             qt_platform: mac
@@ -143,6 +143,14 @@ jobs:
             cmake_env: {}
             pack: 1
 
+          - name: macos-arm
+            os: macos-15
+            ninja_platform: mac
+            qt_platform: mac
+            openssl_arch: darwin64-arm64-cc
+            cmake_flags: "-DUSE_SYSTEM_LIBSSH2=OFF -DUSE_SSH:STRING=localbuild -DUSE_SYSTEM_QT=OFF"
+            cmake_env: {}
+            pack: 1
           #- name: win64
           #  os: windows-latest
           #  ninja_platform: win
@@ -200,12 +208,12 @@ jobs:
           install-deps: true
           modules: qtwebengine
 
-      - name: Install Ninja
-        uses: seanmiddleditch/gha-setup-ninja@v4
-        with:
-          version: 1.11.1
-          platform: ${{ matrix.env.ninja_platform }}
-          destination: ninja
+ #     - name: Install Ninja
+ #       uses: seanmiddleditch/gha-setup-ninja@v4
+ #       with:
+ #         version: 1.11.1
+ #         platform: ${{ matrix.env.ninja_platform }}
+ #         destination: ninja
 
       - name: Setup MSVC environment
         if: matrix.env.ninja_platform == 'win'
